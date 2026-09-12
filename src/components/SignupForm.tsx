@@ -332,7 +332,7 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           {isSubmitting ? (
             <div className="loading" id="submitLoadingSpinner"></div>
           ) : (
-            <span className="van-button__text">Create your IMDB account</span>
+            <span className="van-button__text">Create your ZHMD account</span>
           )}
         </div>
       </button>

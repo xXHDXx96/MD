@@ -252,7 +252,10 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
               </div>
 
               <div className="space-y-3">
-                {movies.map((movie) => (
+                {movies
+                  .slice()
+                  .sort((a, b) => a.reward - b.reward)
+                  .map((movie, idx) => (
                   <div
                     key={movie.id}
                     className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg border border-gray-100 hover:border-yellow-400 transition-colors"
@@ -267,6 +270,9 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-1.5">
+                        <span className="text-[10px] bg-neutral-900 text-yellow-400 font-bold px-1.5 py-0.2 rounded shrink-0">
+                          #{idx + 1}
+                        </span>
                         <span className="font-bold text-sm text-gray-900 truncate">{movie.title}</span>
                       </div>
                       <div className="text-xs text-gray-500 truncate">{movie.titleZh} · {movie.year}</div>
@@ -308,15 +314,20 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
           <div className="p-3 space-y-3">
             <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-200 flex justify-between items-center">
               <div>
-                <h2 className="text-base font-bold text-gray-900">Movie Task Center</h2>
-                <p className="text-xs text-gray-500">
-                  Rate films to earn instant commission rewards.
+                <div className="flex items-center space-x-1.5">
+                  <h2 className="text-base font-bold text-gray-900">Movie Task Center</h2>
+                  <span className="text-[10px] bg-yellow-100 text-yellow-800 font-semibold px-1.5 py-0.5 rounded border border-yellow-300">
+                    从小到大收益递增
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Task rewards scale progressively from $0.50 to $22.00
                 </p>
               </div>
               <button
                 onClick={handleResetTasks}
                 title="Refresh tasks"
-                className="text-gray-500 hover:text-black p-2 bg-gray-100 rounded-lg flex items-center space-x-1 text-xs cursor-pointer"
+                className="text-gray-500 hover:text-black p-2 bg-gray-100 rounded-lg flex items-center space-x-1 text-xs cursor-pointer shrink-0 ml-2"
               >
                 <RotateCcw size={14} />
                 <span>Refresh</span>
@@ -324,7 +335,10 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
             </div>
 
             <div className="space-y-3">
-              {movies.map((movie) => (
+              {movies
+                .slice()
+                .sort((a, b) => a.reward - b.reward)
+                .map((movie, idx) => (
                 <div key={movie.id} className="bg-white rounded-xl p-3 shadow-sm border border-gray-200">
                   <div className="flex space-x-3">
                     <img
@@ -337,7 +351,12 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
                     />
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
-                        <div className="font-bold text-gray-900 text-sm leading-tight">{movie.title}</div>
+                        <div className="flex items-center space-x-1.5 mb-0.5">
+                          <span className="text-[10px] bg-[#121212] text-[#f5c518] font-bold px-1.5 py-0.2 rounded shrink-0">
+                            Task #{idx + 1}
+                          </span>
+                          <span className="font-bold text-gray-900 text-sm leading-tight truncate">{movie.title}</span>
+                        </div>
                         <div className="text-xs text-gray-500 mt-0.5">{movie.titleZh} ({movie.year})</div>
                         <div className="flex flex-wrap gap-1 mt-1.5">
                           {movie.genres.map((g) => (
@@ -350,7 +369,7 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
 
                       <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
                         <div>
-                          <div className="text-[10px] text-gray-400">Commission</div>
+                          <div className="text-[10px] text-gray-400">Task Commission</div>
                           <div className="text-emerald-600 font-bold text-sm">+${movie.reward.toFixed(2)}</div>
                         </div>
 

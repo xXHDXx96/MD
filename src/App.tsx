@@ -31,6 +31,11 @@ export default function App() {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && parsed.phone) {
+          // Ensure initial balance is 0$ if it was previous default 50
+          if (parsed.balance === 50.0) {
+            parsed.balance = 0.0;
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(parsed));
+          }
           setCurrentUser(parsed);
         }
       }
@@ -50,7 +55,7 @@ export default function App() {
       phone: sessionData.phone,
       countryCode: sessionData.countryCode,
       email: sessionData.email,
-      balance: 50.0, // Welcome signup bonus
+      balance: 0.0, // Initial balance 0$
       todayEarnings: 0.0,
       completedTasks: 0,
       vipLevel: 'VIP 1',
@@ -73,7 +78,7 @@ export default function App() {
       phone: sessionData.phone,
       countryCode: sessionData.countryCode,
       email: `${sessionData.phone.replace(/[^0-9]/g, '').slice(-8)}@gmail.com`,
-      balance: 50.0,
+      balance: 0.0, // Initial balance 0$
       todayEarnings: 0.0,
       completedTasks: 0,
       vipLevel: 'VIP 1',
