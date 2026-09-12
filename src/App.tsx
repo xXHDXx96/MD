@@ -6,6 +6,7 @@ import { SuccessDialog } from './components/SuccessDialog';
 import { Dashboard } from './components/Dashboard';
 import { ZhmdLogo } from './components/ZhmdLogo';
 import { UserSession } from './types';
+import { getDbUsers, saveDbUsers } from './data/database';
 
 const SESSION_STORAGE_KEY = 'zhmd_user_session';
 
@@ -102,6 +103,11 @@ export default function App() {
       setCurrentUser(target);
       try {
         localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(target));
+        // Also ensure user exists in the admin database
+        const dbUsers = getDbUsers();
+        if (!dbUsers.some((u) => u.phone === target.phone)) {
+          saveDbUsers([target, ...dbUsers]);
+        }
       } catch {
         // storage ignored
       }
@@ -126,6 +132,10 @@ export default function App() {
       const updated = updater(prev);
       try {
         localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(updated));
+        // Sync update to the DB users table
+        const dbUsers = getDbUsers();
+        const nextDb = dbUsers.map((u) => (u.phone === updated.phone ? { ...u, ...updated } : u));
+        saveDbUsers(nextDb);
       } catch {
         // storage ignored
       }

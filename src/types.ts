@@ -36,6 +36,9 @@ export interface UserSession {
   vipLevel: string;
   inviteCode: string;
   loginTime: string;
+  registeredAt?: string;
+  status?: 'active' | 'frozen' | 'pending';
+  isAdmin?: boolean;
 }
 
 export interface MovieItem {
@@ -50,4 +53,24 @@ export interface MovieItem {
   status: 'available' | 'completed';
   userRating?: number;
   userComment?: string;
+}
+
+export interface FinancialRecord {
+  id: string;
+  userId: string;
+  userPhone: string;
+  type: 'deposit' | 'withdraw' | 'commission' | 'bonus' | 'admin_adjustment';
+  amount: number;
+  status: 'completed' | 'pending' | 'rejected';
+  timestamp: string;
+  description: string;
+}
+
+export interface SystemAuditLog {
+  id: string;
+  adminName: string;
+  action: string;
+  target: string;
+  timestamp: string;
+  ip: string;
 }

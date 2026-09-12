@@ -17,9 +17,11 @@ import {
   ChevronRight,
   X,
   RotateCcw,
+  Database,
 } from 'lucide-react';
 import { UserSession, MovieItem } from '../types';
 import { INITIAL_MOVIES } from '../data/movies';
+import { AdminDatabaseTab } from './AdminDatabaseTab';
 
 interface DashboardProps {
   user: UserSession;
@@ -31,7 +33,7 @@ const FALLBACK_POSTER =
   'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&auto=format&fit=crop&q=80';
 
 export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
-  const [activeTab, setActiveTab] = useState<'home' | 'tasks' | 'records' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'tasks' | 'records' | 'profile' | 'admin'>('home');
   const [movies, setMovies] = useState<MovieItem[]>(INITIAL_MOVIES);
   const [selectedMovie, setSelectedMovie] = useState<MovieItem | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(9);
@@ -500,6 +502,24 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
               </div>
 
               <div
+                onClick={() => setActiveTab('admin')}
+                className="p-3.5 flex items-center justify-between hover:bg-yellow-50/50 cursor-pointer bg-amber-50/30 rounded-lg border border-amber-200/60 transition-colors"
+                id="profileAdminDbEntry"
+              >
+                <div className="flex items-center space-x-3 text-gray-900">
+                  <Database size={18} className="text-[#f5c518] fill-[#f5c518]/20" />
+                  <div className="text-left">
+                    <div className="font-bold text-xs flex items-center space-x-1.5">
+                      <span>后台管理与数据库中心</span>
+                      <span className="text-[9px] bg-black text-[#f5c518] font-mono px-1 rounded">ADMIN</span>
+                    </div>
+                    <div className="text-[10px] text-gray-500">用户资产调整 · 任务报酬 · 财务流水 · SQL引擎</div>
+                  </div>
+                </div>
+                <ChevronRight size={16} className="text-gray-400" />
+              </div>
+
+              <div
                 onClick={() => showToast('Online agent is ready to assist you (24/7)')}
                 className="p-3.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer"
               >
@@ -533,6 +553,17 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
               </button>
             </div>
           </div>
+        )}
+
+        {/* ================= 5. ADMIN DATABASE MANAGEMENT TAB ================= */}
+        {activeTab === 'admin' && (
+          <AdminDatabaseTab
+            currentUser={user}
+            movies={movies}
+            onUpdateMovies={setMovies}
+            onUpdateCurrentUser={onUpdateUser}
+            showToast={showToast}
+          />
         )}
       </main>
 
@@ -810,6 +841,16 @@ export function Dashboard({ user, onLogout, onUpdateUser }: DashboardProps) {
         >
           <User size={20} className={activeTab === 'profile' ? 'text-[#f5c518]' : ''} />
           <span className="text-[11px] mt-0.5">Mine</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('admin')}
+          className={`flex flex-col items-center flex-1 py-1 transition-colors cursor-pointer ${
+            activeTab === 'admin' ? 'text-black font-bold' : 'text-gray-400'
+          }`}
+        >
+          <Database size={20} className={activeTab === 'admin' ? 'text-[#f5c518]' : ''} />
+          <span className="text-[11px] mt-0.5">DB后台</span>
         </button>
       </nav>
     </div>
